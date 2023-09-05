@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>Youtube Downloader</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+<div class="content">
+    <h1 style="text-align: center">Update Video</h1>
+
+    <div class="form" style="text-align: center">
+        <form action="/update/{{video.id}}" method="POST">
+            <input type="text" name="path" id="content" value="{{video.content}}">
+            <input type="submit" id="submitButton" value="Update">
+        </form>
+    </div>
+</div>
+</body>
+</html>
