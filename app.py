@@ -100,6 +100,11 @@ def download_video(url: str):
 
 
 def cleanup_title(og_title: str):
+    """
+    Remove chars from YouTube video title in order to maintain allowed title name for Windows
+    :param og_title:
+    :return:
+    """
     translation_table = str.maketrans('', '', '<>:/|?*')
 
     # Remove characters from the string
