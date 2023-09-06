@@ -23,7 +23,7 @@ class Video(db.Model):
         return '<Task %r>' % self.id
 
 
-# with app.app_context():
+#with app.app_context():
 #    db.create_all()
 
 
@@ -78,6 +78,7 @@ def update(id):
 def download_video(url: str):
     try:
         yt = YouTube(url, use_oauth=False)
+        print(yt.title)
         stream = yt.streams.get_audio_only()
         filename = yt.title + ".mp3"
         stream.download(output_path=output_folder, filename=filename)
