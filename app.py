@@ -81,9 +81,12 @@ def download_video(url: str):
         yt = YouTube(url, use_oauth=False)
         logging.info(yt.title)
         stream = yt.streams.get_audio_only()
-        filename = yt.title + ".mp3"
+
+        title = cleanup_title(yt.title)
+        logging.info(title)
+        filename = title + ".mp3"
         stream.download(output_path=output_folder, filename=filename)
-        new_file = Video(content=yt.title, path=filename)
+        new_file = Video(content=title, path=filename)
         db.session.add(new_file)
         db.session.commit()
 
@@ -94,6 +97,15 @@ def download_video(url: str):
         return render_template('ErrorAgeRestricted.html')
     except:
         return 'Something went wrong while trying to download the video'
+
+
+def cleanup_title(og_title: str):
+    translation_table = str.maketrans('', '', '<>:/|?*')
+
+    # Remove characters from the string
+    input_string = og_title
+    result_string = input_string.translate(translation_table)
+    return result_string
 
 
 if __name__ == '__main__':
