@@ -17,6 +17,28 @@
         <input type="submit" id="submitButton" value="Download Video">
     </form>
     </div>
+    <h1>Progress Bar</h1>
+    <div id="progress-container">
+        <div id="progress-bar" style="width: 0%;"></div>
+    </div>
+    <p id="progress-text">0%</p>
+
+    <script>
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+
+        const eventSource = new EventSource('/progress_data');
+        eventSource.onmessage = (event) => {
+            const progress = parseInt(event.data);
+            progressBar.style.width = progress + '%';
+            progressText.innerText = progress + '%';
+        };
+
+        eventSource.onerror = (error) => {
+            console.error('EventSource failed:', error);
+            eventSource.close();
+        };
+    </script>
     <div>
         <h1 style="text-align: center">History</h1>
 

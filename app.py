@@ -1,7 +1,7 @@
 import os
 import logging
 import pytube.exceptions
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, Response
 from pytube import YouTube
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -12,6 +12,7 @@ db = SQLAlchemy(app)
 # adjust path depending on OS/pythonInterpreter
 output_folder = "downloads"  # "/flaskYoutubeDownloader/downloads"
 logging.basicConfig(level=logging.INFO)
+global filesize
 
 
 class Video(db.Model):
@@ -78,10 +79,11 @@ def update(id):
 
 def download_video(url: str):
     try:
-        yt = YouTube(url, use_oauth=False)
+        yt = YouTube(url, use_oauth=False, on_progress_callback=progress_function)
         logging.info(yt.title)
         stream = yt.streams.get_audio_only()
-
+        global filesize
+        filesize = stream.filesize
         title = cleanup_title(yt.title)
         logging.info(title)
         filename = title + ".mp3"
@@ -99,6 +101,10 @@ def download_video(url: str):
         return 'Something went wrong while trying to download the video'
 
 
+#def progress_data():
+#    return Response(simulate_progress(), content_type='text/event-stream')
+
+
 def cleanup_title(og_title: str):
     """
     Remove chars from YouTube video title in order to maintain allowed title name for Windows
@@ -111,6 +117,12 @@ def cleanup_title(og_title: str):
     input_string = og_title
     result_string = input_string.translate(translation_table)
     return result_string
+
+
+def progress_function(chunk, file_handle, bytes_remaining):
+    current = ((filesize - bytes_remaining) / filesize)
+    percent = '{0:.1f}'.format(current * 100)
+    logging.info(percent)
 
 
 if __name__ == '__main__':
