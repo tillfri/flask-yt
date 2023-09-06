@@ -61,8 +61,8 @@ def update(id):
     old_path = os.path.join(output_folder, video.path)
 
     if request.method == 'POST':
-        video.path = request.form['path'] + ".mp3"
-        video.content = request.form['path']
+        video.path = cleanup_title(request.form['path'] + ".mp3")
+        video.content = cleanup_title(request.form['path'])
 
         try:
             db.session.commit()
