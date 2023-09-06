@@ -2,3 +2,5 @@
 /data
 /instance
 /venv
+/.idea
+__pycache__
