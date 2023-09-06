@@ -1,5 +1,5 @@
 import os
-
+import logging
 import pytube.exceptions
 from flask import Flask, render_template, url_for, request, redirect
 from pytube import YouTube
@@ -78,7 +78,7 @@ def update(id):
 def download_video(url: str):
     try:
         yt = YouTube(url, use_oauth=False)
-        print(yt.title)
+        logging.debug(yt.title)
         stream = yt.streams.get_audio_only()
         filename = yt.title + ".mp3"
         stream.download(output_path=output_folder, filename=filename)
