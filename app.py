@@ -11,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///videos.db'
 db = SQLAlchemy(app)
 # adjust path depending on OS/pythonInterpreter
 output_folder = "downloads"  # "/flaskYoutubeDownloader/downloads"
+logging.basicConfig(level=logging.INFO)
 
 
 class Video(db.Model):
@@ -23,7 +24,7 @@ class Video(db.Model):
         return '<Task %r>' % self.id
 
 
-#with app.app_context():
+# with app.app_context():
 #    db.create_all()
 
 
@@ -78,7 +79,7 @@ def update(id):
 def download_video(url: str):
     try:
         yt = YouTube(url, use_oauth=False)
-        logging.debug(yt.title)
+        logging.info(yt.title)
         stream = yt.streams.get_audio_only()
         filename = yt.title + ".mp3"
         stream.download(output_path=output_folder, filename=filename)
