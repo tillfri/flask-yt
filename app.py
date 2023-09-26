@@ -25,8 +25,10 @@ class Video(db.Model):
         return '<Task %r>' % self.id
 
 
-# with app.app_context():
-#    db.create_all()
+if not os.path.exists("instance/videos.db"):
+    logging.info("No SQL file found, new videos.db created")
+    with app.app_context():
+        db.create_all()
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -35,8 +37,9 @@ def index():  # put application's code here
         yt_url = request.form['content']
         return download_video(yt_url)
     else:
-        history = Video.query.order_by(Video.date_created).all().reverse()
-        return render_template('index.html', history=history)
+        history = Video.query.order_by(Video.date_created).all()
+        history_reversed = history[::-1]
+        return render_template('index.html', history=history_reversed)
 
 
 @app.route('/delete/<int:id>')

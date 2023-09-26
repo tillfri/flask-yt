@@ -1,6 +1,6 @@
 /downloads
 /data
-/instance
+/instance/videos.db
 /venv
 /.idea
-__pycache__
+/__pycache__
