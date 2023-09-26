@@ -35,7 +35,7 @@ def index():  # put application's code here
         yt_url = request.form['content']
         return download_video(yt_url)
     else:
-        history = Video.query.order_by(Video.date_created).all()
+        history = Video.query.order_by(Video.date_created).all().reverse()
         return render_template('index.html', history=history)
 
 
@@ -101,7 +101,7 @@ def download_video(url: str):
         return 'Something went wrong while trying to download the video'
 
 
-#def progress_data():
+# def progress_data():
 #    return Response(simulate_progress(), content_type='text/event-stream')
 
 
