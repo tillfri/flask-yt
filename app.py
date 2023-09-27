@@ -56,6 +56,7 @@ def delete(id):
             os.remove(path=path)
         return redirect('/')
     except:
+        logging.exception('')
         return "Something went wrong deleting the entry in the database"
 
 
@@ -75,6 +76,7 @@ def update(id):
                 os.rename(old_path, path)
             return redirect('/')
         except:
+            logging.exception('')
             return 'Something went wrong trying to update the entry in the database'
     else:
         return render_template('update.html', video=video)
@@ -101,6 +103,7 @@ def download_video(url: str):
     except pytube.exceptions.AgeRestrictedError:
         return render_template('ErrorAgeRestricted.html')
     except:
+        logging.exception('')
         return 'Something went wrong while trying to download the video'
 
 
