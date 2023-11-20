@@ -86,7 +86,7 @@ def download_video(url: str):
     try:
         yt = YouTube(url, use_oauth=False, on_progress_callback=progress_function)
         logging.info(yt.title)
-        stream = yt.streams.get_audio_only()
+        stream = yt.streams.get_audio_only("mp3")
         global filesize
         filesize = stream.filesize
         title = cleanup_title(yt.title)
