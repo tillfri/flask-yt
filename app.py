@@ -84,9 +84,9 @@ def update(id):
 
 def download_video(url: str):
     try:
-        yt = YouTube(url, use_oauth=False, on_progress_callback=progress_function)
+        yt = YouTube(url, use_oauth=True, allow_oauth_cache=True, on_progress_callback=progress_function)
         logging.info(yt.title)
-        stream = yt.streams.get_audio_only()
+        stream = yt.streams.get_audio_only(subtype="mp3")
         global filesize
         filesize = stream.filesize
         title = cleanup_title(yt.title)
@@ -101,6 +101,7 @@ def download_video(url: str):
     except pytube.exceptions.RegexMatchError:
         return render_template('ErrorRegexMatch.html')
     except pytube.exceptions.AgeRestrictedError:
+        logging.exception('')
         return render_template('ErrorAgeRestricted.html')
     except:
         logging.exception('')
@@ -117,7 +118,7 @@ def cleanup_title(og_title: str):
     :param og_title:
     :return:
     """
-    translation_table = str.maketrans('', '', '<>:/|?*')
+    translation_table = str.maketrans('', '', '<>:|?*/')
 
     # Remove characters from the string
     input_string = og_title
